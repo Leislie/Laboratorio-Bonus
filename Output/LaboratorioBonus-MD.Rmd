@@ -1,0 +1,287 @@
+---
+title: "LaboratorioBonus-MD"
+author: "Leislie R. Manjarrez O."
+date: "2023-03-19"
+output: html_document
+---
+
+Hecho con gusto por Leislie R. Manjarrez O.
+
+Laboratorio Bonus- Ejemplos EconGeo
+
+Instalamos la paquetria
+install.packages("devtools")
+install.packages("EconGeo")
+
+Llamamos a las librerias
+```{r}
+library(devtools)
+library(EconGeo)
+```
+
+Example 4: Plot a Hoover curve (pag. 7)
+Esta funcion traza una curva de Hoover (1936) a partir de matrices de regiones-industrias.Generamos vectores de conteo industrial y poblacional
+```{r}
+ind <- c(0,10,10,30,50)
+pop <- c(10,15,20,25,30)
+```
+
+Verificamos el vector ind
+```{r}
+ind
+```
+
+Verificamos el vector pop
+```{r}
+pop
+```
+
+Ejecute la funcion (30% de la poblacion produce el 50% de la produccion industrial)
+```{r}
+Hoover.curve (ind,pop)
+```
+
+Calcule el Gini de Hoover correspondiente
+```{r}
+Hoover.Gini(ind,pop)
+```
+
+
+
+Gini (pag.14)
+La funcion calcula el coeficiente de Gini. El indice de Gini mide la desigualdad espacial. Va desde 0 (perfecta igualdad de ingresos) a 1 (perfecta desigualdad de ingresos) y se deriva de la curva de Lorenz
+Ejemplo:
+Generamos los vectores
+```{r}
+ind <- c(0,10,10,30,50)
+```
+
+Corremos la funcion
+```{r}
+Gini(ind)
+```
+
+Generamos una matriz industria-region
+```{r}
+mat = matrix (
+      c(0,1,0,0,
+        0,1,0,0,
+        0,1,0,0,
+        0,1,0,1,
+        0,1,1,1), ncol = 4, byrow = T)
+rownames(mat) <- c ("R1","R2","R3","R4","R5")
+colnames(mat) <- c ("I1","I2","I3","I4")
+```
+
+Corremos la funcion
+```{r}
+Gini(mat)
+```
+
+Corremos la funcion y agregamos todas las industrias
+```{r}
+Gini(rowSums(mat))
+```
+
+Corremos la funcion para la industria 1 solamente (igualdad perfecta)
+```{r}
+Gini(mat[,1])
+```
+
+Corremos la funcion para la industria 2 solamente (igualdad perfecta)
+```{r}
+Gini(mat[,2])
+```
+
+Corremos la funcion para la industria 3 solamente (desigualdad perfecta: max Gini = (5-1)/5)
+```{r}
+Gini(mat[,3])
+```
+
+Corremos la funcion para la industria 4 solamente (el 40% superior produce el 100% de la producción)
+```{r}
+Gini(mat[,4])
+```
+
+
+
+Hoover Gini (pag.26)
+Esta funcion calcula el Gini de Hoover (la cual lleva el nombre de Hedgar Hoover). El indice de Hoover es una medida de desigualdad espacial. Va desde 0 (perfecta igualdad de ingresos) a 1 (perfecta desigualdad de ingresos) y se calcula a partir de la curva de Hoover asociada a una determinada distribución de población, industrias o tecnologías y una categoría de referencia
+Ejemplo:
+Generamos los vectores de conteo industrial y poblacional
+```{r}
+ind <- c(0,10,10,30,50)
+pop <- c(10,15,20,25,30)
+```
+
+Corremos la funcion (30% de la poblacion produce el 50% de la produccion industrial)
+```{r}
+Hoover.Gini(ind, pop)
+```
+
+Generamos una matriz region-industria
+```{r}
+mat = matrix(
+  c(0,10,0,0,
+    0,15,0,0,
+    0,20,0,0,
+    0,25,0,1,
+    0,30,1,1), ncol = 4, byrow = T)
+rownames(mat) <- c ("R1","R2","R3","R4","R5")
+colnames(mat) <- c ("I1","I2","I3","I4")
+```
+
+Corremos la funcion
+```{r}
+Hoover.Gini(mat,pop)
+```
+
+Corremos la funcion agregando todas las industrias
+```{r}
+Hoover.Gini(rowSums(mat), pop)
+```
+
+Corremos la funcion con la industria 1 solamente
+```{r}
+Hoover.Gini(mat[,1], pop)
+```
+
+Corremos la funcion con la industria 2 solamente (perfectamente proporcional con la pobalcion)
+```{r}
+Hoover.Gini(mat[,2], pop)
+```
+
+Corremos la funcion con la industria 3 solamente (30% de la poblacion produce 100% de la produccion)
+```{r}
+Hoover.Gini(mat[,3], pop)
+```
+
+Corremos la funcion con la industria 4 solamente (55% de la poblacion produce 100% de la produccion)
+```{r}
+Hoover.Gini(mat[,4], pop)
+```
+
+
+
+locational.Gini (pag. 34)
+Esta funcion calcula el coeficiente de Gini de ubicacion propuesto por Krugman a partir de matrices de regiones-industrias. Cuanto mayor sea el coeficiente (limite teorico = 0,5), mayor sera la concentracion industrial. El Gini de ubicacion de una industria que no esta localizada en absoluto (perfectamente distribuida) en proporcion al empleo total seria 0.
+Ejemplo:
+Generamos una matriz region-industria
+```{r}
+mat = matrix(
+  c(100,0,0,0,0,
+    0,15,5,70,10,
+    0,20,10,20,50,
+    0,25,30,5,40,
+    0,40,55,5,0), ncol = 5, byrow = T)
+rownames(mat) <- c ("R1","R2","R3","R4","R5")
+colnames(mat) <- c ("I1","I2","I3","I4","I5")
+```
+
+Corremos la funcion
+```{r}
+locational.Gini(mat)
+```
+
+
+
+locational.Gini.curve (pag.35)
+Esta funcion traza una curva de Gini de ubicacion siguiendo a Krugman a partir de matrices de regiones-industrias
+Ejemplo:
+Generamos una matriz region-industria
+```{r}
+mat = matrix(
+  c(100,0,0,0,0,
+    0,15,5,70,10,
+    0,20,10,20,50,
+    0,25,30,5,40,
+    0,40,55,5,0), ncol = 5, byrow = T)
+rownames(mat) <- c ("R1","R2","R3","R4","R5")
+colnames(mat) <- c ("I1","I2","I3","I4","I5")
+```
+
+Corremos la funcion
+```{r}
+locational.Gini.curve(mat)
+locational.Gini.curve(mat, pdf = TRUE)
+```
+
+
+
+Lorenz.curve (pag.36)
+Esta funcion traza una curva de Lorenz a partir de recuentos industriales regionales. Esta curva indica la distribucion desigual de una industria entre regiones
+Ejemplo:
+Generamos vectores de recuentos industriales
+```{r}
+ind <- c(0,10,10,30,50)
+```
+
+Corremos la funcion
+```{r}
+Lorenz.curve(ind)
+Lorenz.curve(ind, pdf = TRUE)
+Lorenz.curve(ind, plot = FALSE)
+```
+
+Generamos una matriz region-industria
+```{r}
+mat = matrix(
+  c(0,1,0,0,
+    0,1,0,0,
+    0,1,0,0,
+    0,1,0,1,
+    0,1,1,1), ncol = 4, byrow = T)
+rownames(mat) <- c ("R1","R2","R3","R4","R5")
+colnames(mat) <- c ("I1","I2","I3","I4")
+```
+
+Corremos la funcion
+```{r}
+Lorenz.curve(mat)
+Lorenz.curve(mat, pdf = TRUE)
+Lorenz.curve(mat, plot = FALSE)
+```
+
+Corremos la funcion agregando todas las industrias
+```{r}
+Lorenz.curve(rowSums(mat))
+Lorenz.curve(rowSums(mat), pdf = TRUE)
+Lorenz.curve(rowSums(mat), plot = FALSE)
+```
+
+Corremos la funcion solamente con la industria 1 (igualdad perfecta)
+```{r}
+Lorenz.curve(mat[,1])
+Lorenz.curve(mat[,1], pdf = TRUE)
+Lorenz.curve(mat[,1], plot = FALSE)
+```
+
+Corremos la funcion solamente con la industria 2 (igualdad perfecta)
+```{r}
+Lorenz.curve(mat[,2])
+Lorenz.curve(mat[,2], pdf = TRUE)
+Lorenz.curve(mat[,2], plot = FALSE)
+```
+
+Corremos la funcion solamente con la industria 3 (desigualdad perfecta)
+```{r}
+Lorenz.curve(mat[,3])
+Lorenz.curve(mat[,3], pdf = TRUE)
+Lorenz.curve(mat[,3], plot = FALSE)
+```
+
+Corremos la funcion solamente con la industria 4 (el 40% superior produce el 100% de la produccion)
+```{r}
+Lorenz.curve(mat[,4])
+Lorenz.curve(mat[,4], pdf = TRUE)
+Lorenz.curve(mat[,4], plot = FALSE)
+```
+
+Comparamos la distribucion de las industrias
+```{r}
+par(mfrow=c(2,2))
+Lorenz.curve(mat[,1])
+Lorenz.curve(mat[,2])
+Lorenz.curve(mat[,3])
+Lorenz.curve(mat[,4])
+```
